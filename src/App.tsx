@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import ReactFlow, { useNodesState } from "reactflow";
+import styled from "styled-components";
+import Color from "./Color";
 
-function App() {
+const App = () => {
+  const [nodes, setNodes, onNodeChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useNodesState([]);
+  const nodeTypes = {
+    selectorNode: Color,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <ReactFlow />
+    </Container>
   );
-}
-
+};
 export default App;
+
+const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+`;
