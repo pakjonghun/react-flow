@@ -1,102 +1,50 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import ReactFlow, {
-  Position,
-  useEdges,
-  useEdgesState,
   useNodesState,
-  addEdge,
+  useEdgesState,
+  Background,
+  Node,
 } from "reactflow";
+import "reactflow/dist/style.css";
 import styled from "styled-components";
-import Color from "./Color";
+
+import DragHandleNode from "./DragHandler";
 
 const nodeTypes = {
-  selectorNode: Color,
+  a: DragHandleNode,
 };
 
-const initNodes = [
-  {
-    id: "1",
-    position: {
-      x: 100,
-      y: 100,
-    },
-    data: {
-      label: "hi",
-    },
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-  },
+const initialNodes = [
   {
     id: "2",
-    position: {
-      x: 200,
-      y: 200,
-    },
-    data: {
-      label: "hi",
-    },
-    type: "selectorNode",
+    type: "a",
+    dragHandle: ".custom-drag-handle",
+    style: { border: "1px solid #ddd", padding: "20px 40px" },
+    position: { x: 200, y: 200 },
   },
-];
+] as Node[];
 
-const App = () => {
-  const [value, setValue] = useState("a");
-  const [nodes, setNodes, onNodeChange] = useNodesState(initNodes);
+const DragHandleFlow = () => {
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
-  useEffect(() => {
-    setNodes((nodes) => {
-      return nodes.map((node) => {
-        if (node.id === "1") {
-          return { ...node, data: { ...node.data, label: value } };
-        } else return node;
-      });
-    });
-  }, [value, setNodes]);
-
-  useEffect(() => {
-    const onChange = (event: any) => {
-      setNodes((nds) => {
-        return nds.map((node) => {
-          if (node.id === "2") {
-            return node;
-          }
-
-          return { ...node, data: node.data, color: "gray" };
-        });
-      });
-    };
-  }, []);
-
-  const onConnect = useCallback(
-    (params: any) =>
-      setEdges((eds) =>
-        addEdge({ ...params, animated: true, style: { stroke: "#fff" } }, eds)
-      ),
-    []
-  );
-
-  const onChange = (text: string) => {
-    setValue(text);
-  };
 
   return (
     <Container>
-      <input value={value} onChange={(e) => onChange(e.target.value)} />
       <ReactFlow
-        onNodesChange={onNodeChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
         nodes={nodes}
         edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
-      />
+      >
+        <Background />
+      </ReactFlow>
     </Container>
   );
 };
-export default App;
+
+export default DragHandleFlow;
 
 const Container = styled.div`
   height: 100vh;
-  width: 100vw;
 `;
