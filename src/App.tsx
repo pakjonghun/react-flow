@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
   Position,
   useEdges,
@@ -40,8 +40,19 @@ const initNodes = [
 ];
 
 const App = () => {
+  const [value, setValue] = useState("a");
   const [nodes, setNodes, onNodeChange] = useNodesState(initNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  useEffect(() => {
+    setNodes((nodes) => {
+      return nodes.map((node) => {
+        if (node.id === "1") {
+          return { ...node, data: { ...node.data, label: value } };
+        } else return node;
+      });
+    });
+  }, [value, setNodes]);
 
   useEffect(() => {
     const onChange = (event: any) => {
@@ -65,8 +76,13 @@ const App = () => {
     []
   );
 
+  const onChange = (text: string) => {
+    setValue(text);
+  };
+
   return (
     <Container>
+      <input value={value} onChange={(e) => onChange(e.target.value)} />
       <ReactFlow
         onNodesChange={onNodeChange}
         onEdgesChange={onEdgesChange}
