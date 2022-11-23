@@ -1,5 +1,9 @@
 import { Node } from "reactflow";
 
+type TinputPin = {
+  id: string;
+};
+
 export const initNodes = [
   {
     id: 134134,

@@ -2,6 +2,7 @@ import React from "react";
 import { Connection, Handle, Position } from "reactflow";
 import styled from "styled-components";
 import { UseCtx } from "./ctx";
+import { isTypeMatch } from "./utils";
 
 export interface IData {
   title: string;
@@ -9,21 +10,30 @@ export interface IData {
   type: string;
   color: string;
   pinCount: number;
+  pins: [
+    {
+      id: string;
+      placement: "IN" | "OUT";
+      type: {
+        id: string;
+        name: string;
+      };
+    }
+  ];
 }
 
 const First = (props: any) => {
-  console.log("props", props.data);
-
   const ctx = UseCtx();
 
   const { title, desc, type, color, pinCount } = props.data as IData;
-  const onConnect = (params: any) => console.log("handle onConnect", params);
+  const onConnect = (params: any) => {};
   const isValidConnection = (connection: Connection) => {
     const fromID = connection.source;
     const toID = connection.target;
-    // ctx?.nodes.
 
-    // console.log("thisType", ctx?.nodes);
+    const fromNode = ctx?.nodes.find((node) => node.id === fromID);
+    const toNode = ctx?.nodes.find((node) => node.id === toID);
+
     return true;
   };
 
